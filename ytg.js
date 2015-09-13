@@ -1,6 +1,6 @@
 /**
  * getUrl takes in a callback function and returns the current active tab's url
- * @params callback
+ * @param callback
  * @author tbarker
  */
 function getUrl(callback) {
@@ -15,7 +15,7 @@ function getUrl(callback) {
 /**
  * consolidateQuery - will take in the title of a youtube content video and strip out
  * all of the useless junk including [ 'ft.', 'featuring, '[*]', '(*)', ' x ', and ','
- * @params vTitle - title string from YouTube
+ * @param vTitle - title string from YouTube
  * @author tbarker
  */
 function consolidateQuery(vTitle) {
@@ -32,17 +32,22 @@ function consolidateQuery(vTitle) {
  * API.  This function primarily is a check for 'New Music Day' results and simply gets
  * then next list item (generally but not always correct) which seems to be the actual
  * content lyrics
- * @params resultSet - JSON results from the genius API call 
+ * @param resultSet - JSON results from the genius API call
+ * @param vidTitle - the title of the youtube video  
  * @author tbarker
  */
-function coalesceGeniusResults(resultSet) {
+function coalesceGeniusResults(resultSet, vidTitle) {
+    var geniusSongNotFound = "Uh-Oh! Looks like Genius.com doesn't have that track!";
     var result = {};
     var i = 0;
-    if(resultSet[0].result.title.indexOf("New Music") > -1) {
-        return resultSet[1].result.url;
-    } else {
-        return resultSet[0].result.url;
+    for(i = 0; i < resultSet.length; i++) {
+        console.log(resultSet[i]);
+        if(vidTitle.indexOf(resultSet[i].result.title) > -1){
+            console.log("success");
+            return resultSet[i].result.url;
+        }
     }
+    document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
 };
 
 /**
@@ -71,15 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 url: 'http://api.genius.com/search?q='+vidTitle+"&"+gAccessKey,
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
                     if(data.response.hits.length == 0) {
-                        console.log("here");
                         document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
                     } else {
-                        var geniusUrl = coalesceGeniusResults(data.response.hits);
-                        console.log(geniusUrl); 
-                        document.getElementById('gLink').setContent = geniusUrl;
-                        chrome.tabs.create({url: geniusUrl});
+                        var geniusUrl = coalesceGeniusResults(data.response.hits, vidTitle);
+                        if(geniusUrl.length > 0)
+                            chrome.tabs.create({url: geniusUrl});
                     }
                 },
                 error: function(data) {
