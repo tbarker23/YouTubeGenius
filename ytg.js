@@ -80,8 +80,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
                     } else {
                         var geniusUrl = coalesceGeniusResults(data.response.hits, vidTitle);
-                        if(geniusUrl.length > 0)
-                            chrome.tabs.create({url: geniusUrl});
+                        if(geniusUrl.length > 0) {
+                           // chrome.tabs.create({url: geniusUrl});
+                           var thisWin = window.parent;
+                           var geniusWin = window.open(geniusUrl, "Genius Lyrics", "height=100, width=100");
+
+                           thisWin.resizeTo(850, 900);
+                           geniusWin.resizeTo(850, 900);
+                            geniusWin.moveBy(850, 50);
+                        }
                     }
                 },
                 error: function(data) {
