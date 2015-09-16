@@ -1,0 +1,16 @@
+.status-container {
+  display: flex; 
+  display: -webkit-flex; 
+  align-items: center; 
+  width: 425px; 
+  height 300px;
+}
+
+.status-img {
+      height: 25px; 
+      width: 50px; 
+      margin-left: -10px;
+}
+.status-error {
+    font-size: large;
+}
