@@ -4,6 +4,7 @@ var gAccessKey = "access_token=fW9FvH_s8IXkdHb_FusAmKV4jvSkyQJBvAKOXCrCuijTSoTEx
 var youtubeErrorMsg = "Uh-Oh! Looks like there is some problem with YouTube API request<br><br>Are you sure you're on a YouTube.com page?";
 var geniusSongNotFound = "Uh-Oh! Looks like Genius.com doesn't have that track!";
 var referenceTitle= "";
+var geniusWinId = -1;
 
 var PopupController = function() {
     getUrl(function(url){
@@ -38,7 +39,8 @@ function consolidateQuery(vTitle) {
     var newTitle = newTitle.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
     var newTitle = newTitle.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
     var newTitle = newTitle.replace(/ *ft.* */g, ""); //removes all ft. chars
-    var newTitle = newTitle.replace(/ *featuring.* */g, ""); //removes all featuring's 
+    var newTitle = newTitle.replace(/ *featuring.* */g, ""); //removes all featuring's
+    var newTitle = newTitle.replace(/ *HD* */g, ""); 
     return newTitle;
 }
 
@@ -54,12 +56,19 @@ function coalesceGeniusResults(resultSet, vidTitle) {
     var geniusSongNotFound = "Uh-Oh! Looks like Genius.com doesn't have that track!";
     var result = {};
     var i = 0;
-    for(i = 0; i < resultSet.length; i++) {
-        if(vidTitle.indexOf(resultSet[i].result.title) > -1){
-            return resultSet[i].result.url;
-        }
+    console.log(resultSet);
+    if(resultSet.length > 0) {
+        for(i = 0; i < resultSet.length; i++) {
+            console.log(resultSet[i].result.title + '\n' + vidTitle);
+            if(vidTitle.toLowerCase().indexOf(resultSet[i].result.title.toLowerCase()) 
+                    > -1){
+                return resultSet[i].result.url;
+            }
+        }    
+        return resultSet[0].result.url;
+    } else {
+        document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     }
-    document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
 };
 
 /**
@@ -67,24 +76,22 @@ function coalesceGeniusResults(resultSet, vidTitle) {
  * then will execute a new tab/new window with the genius url.
  * @param data - JSON obj recieved from api.genius.com
  */
-function openTab(data) {    
-    if(data.response.hits.length == 0) {
+function openTab(data) {
+    if(data.response.hits.size == 0) {
         document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     } else {
         var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
-        if(geniusUrl.length > 0) {
+        if(geniusUrl != null) {
             document.getElementById('popup-body').style.display = 'none';
             
             chrome.windows.getCurrent(function(win) {
                 chrome.windows.update(win.id, {width: screen.width*.5});
-            }); 
-           
-            var geniusWin = window.open(geniusUrl, "Genius Lyrics", 
-                    "height=100, width=100");
-            
-            geniusWin.resizeTo(screen.width*.5, screen.height);
-            console.log(screen);
-            geniusWin.moveBy(screen.width/2, 0);
+            });
+            chrome.windows.create({url: geniusUrl, left: screen.width, width: screen.width*.5, height: screen.height}, function(data){
+                console.log(data);
+                geniusWinId = data.id;
+                console.log(geniusWinId);
+            });
             // chrome.tabs.create({url: geniusUrl});
         }
     }
