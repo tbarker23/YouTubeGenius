@@ -7,19 +7,14 @@
 <html>
   <head>
     <title>YouTube Genius</title>
-    <style>
-      body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-      }
-    </style>
-    <script src="jquery-2.1.4.min.js"></script> 
-    <script src="ytg.js"></script>
+    <link href="popup.css" rel="stylesheet">
+    <script src="scripts/jquery-2.1.4.min.js"></script> 
+    <script src="popup.js"></script>
   </head>
   <body>
-  <div style="display: flex; display: -webkit-flex; align-items: center; width: 425px; height 300px;">
-      <img src="sad-mac-icon.jpg" style="height: 25px; width: 50px; margin-left: -10px;">
-      <span id="statusMsg"></span>
+  <div class="status-container">
+      <img src="images/sad-mac-icon.jpg" class="status-img">
+      <span id="statusMsg" class="status-error"></span>
   </div>
   </body>
 </html>
