@@ -34,14 +34,29 @@ function getUrl(callback) {
  * @author tbarker
  */
 function consolidateQuery(vTitle) {
-    var newTitle = vTitle.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
-    var newTitle = newTitle.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-    var newTitle = newTitle.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-    var newTitle = newTitle.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-    var newTitle = newTitle.replace(/ *ft.* */g, ""); //removes all ft. chars
-    var newTitle = newTitle.replace(/ *featuring.* */g, ""); //removes all featuring's
-    var newTitle = newTitle.replace(/ *HD* */g, ""); 
-    return newTitle;
+    var str = vTitle.split('-');
+    var artistInfo = str[0];
+    var trackInfo = str[1];
+
+    console.log(str);
+    var artistInfo = artistInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and content
+    var artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
+    var artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
+    var artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
+    var artistInfo = artistInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+    var artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
+    var artistInfo = artistInfo.replace(/ *HD* */g, ""); 
+    
+    var trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
+    var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
+    var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
+    var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
+    var trackInfo = trackInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+    var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
+    var trackInfo = trackInfo.replace(/HD/g, " ");
+    console.log("consolidateQuery \t artistInfo = " + artistInfo 
+            + "\t trackInfo =" + trackInfo); 
+    return artistInfo + trackInfo;
 }
 
 /*coalesceGeniusResults -  will take the JSON result set returned from the genius
@@ -88,9 +103,9 @@ function openTab(data) {
                 chrome.windows.update(win.id, {width: screen.width*.5});
             });
             chrome.windows.create({url: geniusUrl, left: screen.width, width: screen.width*.5, height: screen.height}, function(data){
-                console.log(data);
+               // console.log(data);
                 geniusWinId = data.id;
-                console.log(geniusWinId);
+               // console.log(geniusWinId);
             });
             // chrome.tabs.create({url: geniusUrl});
         }
@@ -107,8 +122,7 @@ function getGeniusInfo(data) {
     if(data.items.length == 0)
         document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
     var vidTitle = data.items[0].snippet.title;
-    referenceTitle = consolidateQuery(vidTitle); 
-    console.log(referenceTitle);
+    referenceTitle = consolidateQuery(vidTitle);
     $.ajax({
         url: 'http://api.genius.com/search?q='+referenceTitle+"&"+gAccessKey,
         dataType: 'json',
