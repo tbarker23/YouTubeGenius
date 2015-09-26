@@ -47,13 +47,13 @@ function consolidateQuery(vTitle) {
     var artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
     var artistInfo = artistInfo.replace(/ *HD* */g, ""); 
     
-    //var trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
-    //var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-    //var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-    //var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-    //var trackInfo = trackInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
-   // var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
-    //var trackInfo = trackInfo.replace(/HD/g, " ");
+    var trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
+    var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
+    var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
+    var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
+    var trackInfo = trackInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+    var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
+    var trackInfo = trackInfo.replace(/HD/g, " ");
     console.log("consolidateQuery \t artistInfo = " + artistInfo 
             + "\t trackInfo =" + trackInfo); 
     return artistInfo + trackInfo;
@@ -95,7 +95,7 @@ function openTab(data) {
     } else {
         var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
         if(geniusUrl != null) {
-            document.getElementById('popup-body').style.display = 'none';
+            //document.getElementById('popup-body').style.display = 'none';
            
             chrome.windows.getCurrent(function(win) {
                 chrome.windows.update(win.id, {width: screen.width*.5});
@@ -133,7 +133,7 @@ function getGeniusInfo(data) {
             openTab(data);
         },
         error: function(data) {
-            document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
+            //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
         }
     });        
         
@@ -160,19 +160,8 @@ var getYoutubeInfo=function(url) {
     });
 };
 
-/**
- * Listens for the the popup.html has loaded.
- * This will fire when the button in the nav bar is clicked
- */
-document.addEventListener('DOMContentLoaded', function() {
-    window.PC = new PopupController();
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log("got message");
+    sendResponse({farewell: "goodbye"});
+        window.PC = new PopupController();
 });
-
-/*chrome.runtime.onMessage.addListener(
-        function(request, sender, sendResponse) {
-            console.log("got message");
-            if(request.action == "start") {
-                window.PC = new PopupController();
-            }
-        });
-*/
