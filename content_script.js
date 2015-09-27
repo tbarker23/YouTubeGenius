@@ -1,3 +1,19 @@
+/*
+ * content_script.js  
+ * Runs during normal browsing to inject code on to the page that the browser is
+ * displaying.  Injects a button on to youtube.com pages that will use functionality
+ * in background.js
+ *
+ * @author tbarker
+ */
+
+
+/** 
+ * Creates an instance of the genius button displayed below vid content
+ * @constructor
+ * @this {btn}
+ * @author tbarker
+ */
 function createBtn() {   
     var btn = document.createElement("input");
     btn.type = "image";
@@ -18,8 +34,7 @@ function createBtn() {
 
 var geniusBtn = createBtn();
 
+//add button to the page whenever DOM changes (ajax workaround from document.ready)
 document.addEventListener("DOMSubtreeModified", function() {
-    var timeout = setTimeout(function() {
         document.getElementById("watch8-sentiment-actions").appendChild(geniusBtn);
-    }, 500);
 }, false);

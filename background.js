@@ -15,7 +15,7 @@ var PopupController = function() {
 
 /**
  * getUrl takes in a callback function and returns the current active tab's url
- * @param callback
+ * @param {object} callback function that will handle the url returned
  * @author tbarker
  */
 function getUrl(callback) {
@@ -30,7 +30,7 @@ function getUrl(callback) {
 /**
  * consolidateQuery - will take in the title of a youtube content video and strip out
  * all of the useless junk including [ 'ft.', 'featuring, '[*]', '(*)', ' x ', and ','
- * @param vTitle - title string from YouTube
+ * @param {string} vTitle title string from YouTube
  * @author tbarker
  */
 function consolidateQuery(vTitle) {
@@ -77,8 +77,8 @@ function consolidateQuery(vTitle) {
  * API.  This function primarily is a check for 'New Music Day' results and simply gets
  * then next list item (generally but not always correct) which seems to be the actual
  * content lyrics
- * @param resultSet - JSON results from the genius API call
- * @param vidTitle - the title of the youtube video  
+ * @param {object} resultSet JSON results from the genius API call
+ * @param {string} vidTitle the title of the youtube video  
  * @author tbarker
  */
 function coalesceGeniusResults(resultSet, vidTitle) {
@@ -102,7 +102,7 @@ function coalesceGeniusResults(resultSet, vidTitle) {
 /**
  * OpenTab - takes the data from genius.com and makes sure there is a result
  * then will execute a new tab/new window with the genius url.
- * @param data - JSON obj recieved from api.genius.com
+ * @param {object} data JSON obj recieved from api.genius.com
  */
 function openTab(data) {
     console.log("opening tab" + populatePref);
@@ -138,7 +138,7 @@ function openTab(data) {
 /**
  * getGeniusInfo - executes the api call to api.genius.com with the title information
  * pulled from api.google.com (youtube)
- * @param data - JSON obj recieved from youtube api api.google.com
+ * @param {object} data JSON obj recieved from youtube api api.google.com
  * @author - tbarker
  */
 function getGeniusInfo(data) {
@@ -164,7 +164,7 @@ function getGeniusInfo(data) {
 /**
  * getYouTubeInfo - executes the api call to googleapis.com (youtube) after getting
  * the video id from the url parameters passed in.
- * @param url - url string from the current tab gotten from getUrl()
+ * @param {string} - url string from the current tab gotten from getUrl()
  * @author tbarker
  */
 var getYoutubeInfo=function(url) {
@@ -189,9 +189,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     window.PC = new PopupController();
 });
 
+/** 
+ * Sets the populating preference (by tab or by window 
+ */
 function setPref(str) {
     populatePref = str;
 };
+
+/**
+ * Gets the populating preference (by tab or by window)
+ */
 function getPref() {
     return populatePref;
-}
+};
