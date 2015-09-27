@@ -192,3 +192,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function setPref(str) {
     populatePref = str;
 };
+function getPref() {
+    return populatePref;
+}
