@@ -161,11 +161,6 @@ var getYoutubeInfo=function(url) {
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log("got message");
-    sendResponse({farewell: "goodbye"});
-        window.PC = new PopupController();
-});
-$(window).load(function() {
-    console.log("calling create btn");
-    putBtn();
+    console.log("recieved event from geniusBtn");
+    window.PC = new PopupController();
 });
