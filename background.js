@@ -165,3 +165,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     sendResponse({farewell: "goodbye"});
         window.PC = new PopupController();
 });
+$(window).load(function() {
+    console.log("calling create btn");
+    putBtn();
+});

@@ -15,15 +15,17 @@
   },
   "permissions": [
     "tabs",
-    "http://*/*",
+    "*://youtube.com/*",
+    "*://www.youtube.com/*",
     "activeTab",
+    "webNavigation",
     "https://ajax.googleapis.com/"
   ],
   "content_scripts": [
     {
       "matches": ["http://*/*",
                   "https://*/*"],
-      "js": ["scripts/jquery-2.1.4.min.js","myscript.js"],
+      "js": ["scripts/jquery-2.1.4.min.js","content_script.js"],
       "run_at": "document_end"
     }
   ],
