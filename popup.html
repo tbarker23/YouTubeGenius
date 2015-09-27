@@ -12,11 +12,30 @@
     <script src="myscript.js"></script>
     <script src="popup.js"></script>
   </head>
-  <body id="popup-body">
-  <div id="status-container" class="status-container">
-      <img src="images/sad-mac-icon.jpg" class="status-img">
-      <span id="statusMsg" class="status-error"></span>
-  </div>
+  <body id="popup-body" style="width: 400px;">
+    <div class="YTGHeading">
+      <img src="images/icon.png">
+      <span class="YTGHeading-text">YouTube Genius</span>
+    </div>
+    
+    <div class="settingsContainer">
+      <div style="font-size: medium;">Settings</div>
+      <form id="clickPreferenceForm">
+          <div class="radioContainer">
+            <input id="newTabRadio" type="radio" name="clickPref" value="newTab"> 
+              <span>New tab when Genius button clicked </span>
+          </div>
+          <div class="radioContainer">
+            <input id="newWinRadio" type="radio" name="clickPref" value="newWin"> 
+            <span>New window when Genius button clicked</span>
+          </div>
+      </form>
+    </div>
+  <footer>
+    <p>Created by: Tommy Barker
+      <a href="mailto:barker.tommy@gmail.com">(barker.tommy@gmail.com)</a>
+    </p>
+  </footer>
   </body>
 </html>
 

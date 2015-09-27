@@ -5,7 +5,7 @@ var youtubeErrorMsg = "Uh-Oh! Looks like there is some problem with YouTube API 
 var geniusSongNotFound = "Uh-Oh! Looks like Genius.com doesn't have that track!";
 var referenceTitle= "";
 var geniusWinId = -1;
-
+var populatePref = "";
 var PopupController = function() {
     getUrl(function(url){
         getYoutubeInfo(url)
@@ -94,7 +94,7 @@ function coalesceGeniusResults(resultSet, vidTitle) {
         }    
         return resultSet[0].result.url;
     } else {
-        window.alert(geniusSongNotFound);
+        alert(geniusSongNotFound);
         //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     }
 };
@@ -105,28 +105,31 @@ function coalesceGeniusResults(resultSet, vidTitle) {
  * @param data - JSON obj recieved from api.genius.com
  */
 function openTab(data) {
+    console.log("opening tab" + populatePref);
     if(data.response.hits.size == 0) {
-        window.alert(geniusSongNotFound);
+        alert(geniusSongNotFound);
         console.log("bad");
         //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     } else {
         var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
-        if(geniusUrl != null) {
-            //document.getElementById('popup-body').style.display = 'none';
-           
-            chrome.windows.getCurrent(function(win) {
-                chrome.windows.update(win.id, {width: screen.width*.5});
-            });
-            
-            chrome.windows.create({
-                url: geniusUrl, 
-                left: screen.width, 
-                width: screen.width*.5, 
-                height: screen.height }, function(data){
-                    geniusWinId = data.id;
-                    console.log(geniusWinId);
-            });
-            // chrome.tabs.create({url: geniusUrl});
+        if(populatePref == "newWin") {
+            if(geniusUrl != null) {
+                chrome.windows.getCurrent(function(win) {
+                    chrome.windows.update(win.id, {width: screen.width*.5});
+                });
+                
+                chrome.windows.create({
+                    url: geniusUrl, 
+                    left: screen.width, 
+                    width: screen.width*.5, 
+                    height: screen.height }, function(data){
+                        geniusWinId = data.id;
+                        console.log(geniusWinId);
+                });
+            } 
+        } else {
+                console.log("correct stuff here");
+                chrome.tabs.create({url: geniusUrl});
         }
     }
 };
@@ -140,7 +143,7 @@ function openTab(data) {
  */
 function getGeniusInfo(data) {
     if(data.items.length == 0)
-        window.alert(youtubeErrorMsg);
+        alert(youtubeErrorMsg);
         //document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
     var vidTitle = data.items[0].snippet.title;
     referenceTitle = consolidateQuery(vidTitle);
@@ -151,7 +154,7 @@ function getGeniusInfo(data) {
             openTab(data);
         },
         error: function(data) {
-            window.alert(geniusSongNotFound);
+            alert(geniusSongNotFound);
             //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
         }
     });        
@@ -174,7 +177,7 @@ var getYoutubeInfo=function(url) {
             getGeniusInfo(data);
         },
         error: function(data) {
-            window.alert(youtubeErrorMsg);
+            alert(youtubeErrorMsg);
             //document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
         }
     });
@@ -182,6 +185,10 @@ var getYoutubeInfo=function(url) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from geniusBtn");
-    var popup = chrome.extension.getViews({type: "popup"});
+    console.log(window.populatePref);
     window.PC = new PopupController();
 });
+
+function setPref(str) {
+    populatePref = str;
+};
