@@ -1,4 +1,6 @@
 /* API keys and such */
+var youtubeApiUrl = "https://www.googleapis.com/youtube/v3/videos?id=";
+var geniusApiUrl = "http://api.genius.com/search?q=";
 var ytAccessKey = "key=AIzaSyDSnJWsRh_7hetLxutrfffzDT6V71iX_4w";
 var gAccessKey = "access_token=fW9FvH_s8IXkdHb_FusAmKV4jvSkyQJBvAKOXCrCuijTSoTEx8MxKlLWTqaj3opU";
 var youtubeErrorMsg = "Uh-Oh! Looks like there is some problem with YouTube API request<br><br>Are you sure you're on a YouTube.com page?";
@@ -6,9 +8,14 @@ var geniusSongNotFound = "Uh-Oh! Looks like Genius.com doesn't have that track!"
 var referenceTitle= "";
 var geniusWinId = -1;
 var populatePref = "";
+
 var PopupController = function() {
     getUrl(function(url){
-        getYoutubeInfo(url)
+        getYoutubeInfo(url, function(youtubeInfo) {
+            getGeniusInfo(youtubeInfo, function(geniusInfo) {
+                openTab(geniusInfo);
+            });           
+        });
     });
 };
 
@@ -84,7 +91,7 @@ function consolidateQuery(vTitle) {
 function coalesceGeniusResults(resultSet, vidTitle) {
     var result = {};
     var i = 0;
-    console.log(resultSet);
+    //console.log(resultSet); //results returned from genius api
     if(resultSet.length > 0) {
         for(i = 0; i < resultSet.length; i++) {
             if(vidTitle.toLowerCase().indexOf(resultSet[i].result.title.toLowerCase()) 
@@ -95,7 +102,6 @@ function coalesceGeniusResults(resultSet, vidTitle) {
         return resultSet[0].result.url;
     } else {
         alert(geniusSongNotFound);
-        //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     }
 };
 
@@ -105,11 +111,8 @@ function coalesceGeniusResults(resultSet, vidTitle) {
  * @param {object} data JSON obj recieved from api.genius.com
  */
 function openTab(data) {
-    console.log("opening tab" + populatePref);
     if(data.response.hits.size == 0) {
         alert(geniusSongNotFound);
-        console.log("bad");
-        //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     } else {
         var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
         if(populatePref == "newWin") {
@@ -124,12 +127,12 @@ function openTab(data) {
                     width: screen.width*.5, 
                     height: screen.height }, function(data){
                         geniusWinId = data.id;
-                        console.log(geniusWinId);
                 });
             } 
         } else {
-                console.log("correct stuff here");
+            if(geniusUrl != null) {
                 chrome.tabs.create({url: geniusUrl});
+            }
         }
     }
 };
@@ -141,17 +144,17 @@ function openTab(data) {
  * @param {object} data JSON obj recieved from youtube api api.google.com
  * @author - tbarker
  */
-function getGeniusInfo(data) {
+function getGeniusInfo(data, callback) {
+    //console.log(data); //info from youtube api
     if(data.items.length == 0)
         alert(youtubeErrorMsg);
-        //document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
     var vidTitle = data.items[0].snippet.title;
     referenceTitle = consolidateQuery(vidTitle);
     $.ajax({
-        url: 'http://api.genius.com/search?q='+referenceTitle+"&"+gAccessKey,
+        url: geniusApiUrl + referenceTitle + "&" + gAccessKey,
         dataType: 'json',
         success: function(data) {
-            openTab(data);
+            callback(data);
         },
         error: function(data) {
             alert(geniusSongNotFound);
@@ -167,25 +170,24 @@ function getGeniusInfo(data) {
  * @param {string} - url string from the current tab gotten from getUrl()
  * @author tbarker
  */
-var getYoutubeInfo=function(url) {
+var getYoutubeInfo=function(url, callback) {
     var videoId = url.split("v=")[1];
-
     $.ajax({
-        url: 'https://www.googleapis.com/youtube/v3/videos?id='+videoId+'&'+ytAccessKey+'&part=snippet,contentDetails,statistics,status',
+        url: youtubeApiUrl + videoId + '&' 
+        + ytAccessKey +'&part=snippet,contentDetails,statistics,status',
         dataType: 'json', 
         success: function(data) {
-            getGeniusInfo(data);
+            callback(data);
         },
         error: function(data) {
             alert(youtubeErrorMsg);
-            //document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
         }
     });
 };
 
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from geniusBtn");
-    console.log(window.populatePref);
     window.PC = new PopupController();
 });
 
