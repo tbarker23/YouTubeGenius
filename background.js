@@ -34,29 +34,43 @@ function getUrl(callback) {
  * @author tbarker
  */
 function consolidateQuery(vTitle) {
-    var str = vTitle.split('-');
-    var artistInfo = str[0];
-    var trackInfo = str[1];
+    if(vTitle.indexOf("-") > -1) {
+        var str = vTitle.split('-');
+        var artistInfo = str[0];
+        var trackInfo = str[1];
 
-    console.log(str);
-    var artistInfo = artistInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and content
-    var artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-    var artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-    var artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-    var artistInfo = artistInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
-    var artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
-    var artistInfo = artistInfo.replace(/ *HD* */g, ""); 
-    
-    var trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
-    var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-    var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-    var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-    var trackInfo = trackInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
-    var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
-    var trackInfo = trackInfo.replace(/HD/g, " ");
-    console.log("consolidateQuery \t artistInfo = " + artistInfo 
-            + "\t trackInfo =" + trackInfo); 
-    return artistInfo + trackInfo;
+        console.log(str);
+        var artistInfo = artistInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and content
+        var artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
+        var artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
+        var artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
+        var artistInfo = artistInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+        var artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
+        var artistInfo = artistInfo.replace(/ *HD* */g, ""); 
+        
+        var trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
+        var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
+        var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
+        var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
+        var trackInfo = trackInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+        var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
+        var trackInfo = trackInfo.replace(/HD/g, " ");
+        console.log("consolidateQuery \t artistInfo = " + artistInfo 
+                + "\t trackInfo =" + trackInfo); 
+        return artistInfo + trackInfo;
+    } else {
+        //for weird videos without the - separating artist/title
+        var vTitle = vTitle.replace(/ *\([^)]*\) */g, ""); //removes parens and content
+        var vTitle = vTitle.replace(/ *\[.*\]* */g, ""); //removes squares and contents
+        var vTitle = vTitle.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
+        var vTitle = vTitle.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
+        var vTitle = vTitle.replace(/ *ft.* */g, ""); //removes all ft. chars
+        var vTitle = vTitle.replace(/ *featuring.* */g, ""); //removes all featuring's
+        var vTitle = vTitle.replace(/ *HD* */g, "");
+
+        return vTitle;
+    } 
+
 }
 
 /*coalesceGeniusResults -  will take the JSON result set returned from the genius
@@ -80,7 +94,8 @@ function coalesceGeniusResults(resultSet, vidTitle) {
         }    
         return resultSet[0].result.url;
     } else {
-        document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
+        window.alert(geniusSongNotFound);
+        //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     }
 };
 
@@ -91,7 +106,9 @@ function coalesceGeniusResults(resultSet, vidTitle) {
  */
 function openTab(data) {
     if(data.response.hits.size == 0) {
-        document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
+        window.alert(geniusSongNotFound);
+        console.log("bad");
+        //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
     } else {
         var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
         if(geniusUrl != null) {
@@ -123,7 +140,8 @@ function openTab(data) {
  */
 function getGeniusInfo(data) {
     if(data.items.length == 0)
-        document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
+        window.alert(youtubeErrorMsg);
+        //document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
     var vidTitle = data.items[0].snippet.title;
     referenceTitle = consolidateQuery(vidTitle);
     $.ajax({
@@ -133,6 +151,7 @@ function getGeniusInfo(data) {
             openTab(data);
         },
         error: function(data) {
+            window.alert(geniusSongNotFound);
             //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
         }
     });        
@@ -155,12 +174,14 @@ var getYoutubeInfo=function(url) {
             getGeniusInfo(data);
         },
         error: function(data) {
-            document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
+            window.alert(youtubeErrorMsg);
+            //document.getElementById('statusMsg').innerHTML = youtubeErrorMsg;
         }
     });
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from geniusBtn");
+    var popup = chrome.extension.getViews({type: "popup"});
     window.PC = new PopupController();
 });
