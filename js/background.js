@@ -127,11 +127,16 @@ function openTab(data) {
                            var geniusHtml = data;
                            var relevantHtml = geniusHtml.substring(geniusHtml.indexOf(" <div class=\"lyrics_container\">")+1);
                            relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
-                           console.log(relevantHtml);
-                           chrome.tabs.query({active: true, currentWindow: true}, 
+                           //relevantHtml = relevantHtml.replace(/"[^"]*"/g, '');
+                            //relevantHtml = relevantHtml.replace(/<div *[\/ 0-9 A-z = " \-]*>/g, "<div>"); //removes squares and contents
+                            //relevantHtml = relevantHtml.replace(/<a *[\/ 0-9 A-z = " \-]*>/g, "<a>"); //removes squares and contents
+                            //relevantHtml = relevantHtml.replace(/\r?\n|\r/g, " ");
+
+                            console.log(relevantHtml);
+                            chrome.tabs.query({active: true, currentWindow: true}, 
                                function(tabs) {
                                    chrome.tabs.sendMessage(tabs[0].id, 
-                                       {lyrics: relevantHtml},
+                                       {lyrics: relevantHtml.toString()},
                                        function(response) {
                                        });
                                });

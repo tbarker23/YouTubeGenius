@@ -46,7 +46,9 @@ document.addEventListener("DOMSubtreeModified", function() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from Extension");
-    console.log(request);
+    console.log(request.lyrics);
     document.getElementById("watch-discussion").innerHTML = "";
-    document.getElementById("watch-discussion").innerHtml = request.lyrics;
+    document.getElementById("watch-discussion").innerHTML = request.lyrics;
+    
+
 });
