@@ -127,11 +127,14 @@ function openTab(data) {
                            var geniusHtml = data;
                            var relevantHtml = geniusHtml.substring(geniusHtml.indexOf(" <div class=\"lyrics_container")+1);
                            relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
-                           //var xmlString = relevantHtml,
+                           var html = $.parseHTML(relevantHtml);
+                           var links = $(".lyrics > p > a", data); 
+                           console.log(links);
+                             //var xmlString = relevantHtml,
                              //              parser = new DOMParser(), 
                                //            doc = parser.parseFromString(
                                  //              xmlString, "text/xml");
-
+                            //console.log(doc.firstChild.getElementsByClassName("lyrics"));
                             //var lyrics = doc.getElementsByClassName("lyrics");
                             //console.log(lyrics); 
                             chrome.tabs.query({active: true, currentWindow: true}, 
