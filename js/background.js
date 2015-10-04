@@ -125,14 +125,15 @@ function openTab(data) {
                $.ajax({url: geniusUrl, 
                        success: function(data) {
                            var geniusHtml = data;
-                           var relevantHtml = geniusHtml.substring(geniusHtml.indexOf(" <div class=\"lyrics_container\">")+1);
+                           var relevantHtml = geniusHtml.substring(geniusHtml.indexOf(" <div class=\"lyrics_container")+1);
                            relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
-                           //relevantHtml = relevantHtml.replace(/"[^"]*"/g, '');
-                            //relevantHtml = relevantHtml.replace(/<div *[\/ 0-9 A-z = " \-]*>/g, "<div>"); //removes squares and contents
-                            //relevantHtml = relevantHtml.replace(/<a *[\/ 0-9 A-z = " \-]*>/g, "<a>"); //removes squares and contents
-                            //relevantHtml = relevantHtml.replace(/\r?\n|\r/g, " ");
+                           //var xmlString = relevantHtml,
+                             //              parser = new DOMParser(), 
+                               //            doc = parser.parseFromString(
+                                 //              xmlString, "text/xml");
 
-                            console.log(relevantHtml);
+                            //var lyrics = doc.getElementsByClassName("lyrics");
+                            //console.log(lyrics); 
                             chrome.tabs.query({active: true, currentWindow: true}, 
                                function(tabs) {
                                    chrome.tabs.sendMessage(tabs[0].id, 
