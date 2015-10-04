@@ -38,3 +38,15 @@ var geniusBtn = createBtn();
 document.addEventListener("DOMSubtreeModified", function() {
         document.getElementById("watch8-sentiment-actions").appendChild(geniusBtn);
 }, false);
+
+document.addEventListener("DOMSubtreeModified", function() {
+        //document.getElementById("watch-discussion").innerHTML = "";
+}, false);
+
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log("recieved event from Extension");
+    console.log(request);
+    document.getElementById("watch-discussion").innerHTML = "";
+    document.getElementById("watch-discussion").innerHtml = request.lyrics;
+});

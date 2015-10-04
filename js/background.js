@@ -13,6 +13,7 @@ var populatePref = ""; //default setting newTab ['newTab' || 'newWin']
 
 /*Getter and Setter for preference for popup.js reference */
 function setPref(str) {
+    console.log(str);
     populatePref = str;
 };
 function getPref() {
@@ -119,6 +120,30 @@ function openTab(data) {
                         geniusWinId = data.id;
                 });
             } 
+        } else if(populatePref == "inPage") {
+            if(geniusUrl != null) {
+               $.ajax({url: geniusUrl, 
+                       success: function(data) {
+                           var geniusHtml = data;
+                           var relevantHtml = geniusHtml.substring(geniusHtml.indexOf(" <div class=\"lyrics_container\">")+1);
+                           relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
+                           console.log(relevantHtml);
+                           chrome.tabs.query({active: true, currentWindow: true}, 
+                               function(tabs) {
+                                   chrome.tabs.sendMessage(tabs[0].id, 
+                                       {lyrics: relevantHtml},
+                                       function(response) {
+                                       });
+                               });
+                       }
+               }); 
+                console.log("var set correct");
+                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, 
+                        function(response) {
+                        });
+                });
+            }
         } else {
             if(geniusUrl != null) {
                 chrome.tabs.create({url: geniusUrl});

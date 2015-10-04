@@ -14,4 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     newTabRadio.onclick = function() {
         chrome.extension.getBackgroundPage().setPref("newTab");
     };
+
+    inPageCommentRadio.onclick = function() {
+        console.log("here:");
+        chrome.extension.getBackgroundPage().setPref("inPage");
+    };
 }, false);
