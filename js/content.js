@@ -6,7 +6,7 @@
  *
  * @author tbarker
  */
-
+var linkIds = [];
 
 /** 
  * Creates an instance of the genius button displayed below vid content
@@ -48,28 +48,49 @@ function consolidateHtml(str) {
    relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
     return relevantHtml;
 
-}
+};
+
+function annotationOnClick() {
+    
+};
+
 function addOnClicks(relevantHtml) {
    var html = $.parseHTML(relevantHtml);
    var links = $(".lyrics > p > a", html); 
-   console.log($(".lyrics > p > a", html));
    //iterate over links and add onclick and remove href to <a>
    for(i = 0; i < links.length; i++) {
        links[i].removeAttribute("href");
+       links[i].id = links[i].getAttribute("data-id");
+       linkIds.push(links[i].id);
        links[i].onclick = function() {
            annotationOnClick(this.id)
        };
     }
-   return html;
+   console.log(links);
+   return links;
 };
+
+function setUpListeners() {
+    var i = 0;
+    console.log(linkIds);
+    for(i = 0; i < linkIds.length; i++) {
+        var anchor = document.getElementById(linkIds[i]);
+        anchor.addEventListener('click', function() {
+            alert(anchor.id);
+        });
+    }
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from Extension");
-    //console.log(request.lyrics);
     var str = consolidateHtml(request.lyrics);
     var links = addOnClicks(str);
+    var output = "";
     console.log(links);
+    for(i = 0; i < links.length; i++) {
+        output += links[i].outerHTML
+    }
     document.getElementById("watch-discussion").innerHTML = "";
-    document.getElementById("watch-discussion").innerHTML = str;
-    
-
+    document.getElementById("watch-discussion").innerHTML = output;
+    setUpListeners();
 });
