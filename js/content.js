@@ -51,7 +51,7 @@ function consolidateHtml(str) {
 };
 
 function annotationOnClick() {
-    
+    alert(this.id);    
 };
 
 function addOnClicks(relevantHtml) {
@@ -66,18 +66,14 @@ function addOnClicks(relevantHtml) {
            annotationOnClick(this.id)
        };
     }
-   console.log(links);
    return links;
 };
 
 function setUpListeners() {
     var i = 0;
-    console.log(linkIds);
     for(i = 0; i < linkIds.length; i++) {
         var anchor = document.getElementById(linkIds[i]);
-        anchor.addEventListener('click', function() {
-            alert(anchor.id);
-        });
+        anchor.addEventListener('click', annotationOnClick, false);
     }
 };
 
@@ -86,7 +82,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var str = consolidateHtml(request.lyrics);
     var links = addOnClicks(str);
     var output = "";
-    console.log(links);
     for(i = 0; i < links.length; i++) {
         output += links[i].outerHTML
     }
