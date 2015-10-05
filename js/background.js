@@ -231,9 +231,19 @@ function getAnnotation(id) {
         url: geniusAnnotationUrl + id + "?" + gAccessKey,
         dataType: 'json',
         success: function(data) {
+            var str = "";
             console.log(data);
-            alert(data.response.annotation.toString);
-            //callback(data);
+            for(var i=0; i < data.response.annotation.body.dom.children.length; i++) {
+                if(data.response.annotation.body.dom.children[i].tag == "p") {
+                for(var j=0; 
+                    j < data.response.annotation.body.dom.children[i].children.length; 
+                    j++) {
+                        if(typeof data.response.annotation.body.dom.children[i].children[j] != "object") 
+                        str += data.response.annotation.body.dom.children[i].children[j];
+                        }
+                }
+                }
+            alert(str);
         },
         error: function(data) {
             alert(geniusSongNotFound);
