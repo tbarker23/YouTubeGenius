@@ -95,8 +95,6 @@ function getGeniusInfo(data, callback) {
     });        
         
 };
-function getAnnotations() {
-}
 /**
  * OpenTab - takes the data from genius.com and makes sure there is a result
  * then will execute a new tab/new window with the genius url.
@@ -127,22 +125,10 @@ function openTab(data) {
                        success: function(data) {
                            var i = 0;
                            var geniusHtml = data;
-                           var relevantHtml = geniusHtml.substring(geniusHtml.indexOf(" <div class=\"lyrics_container")+1);
-                           relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
-                           /*make document to get <a>'s */
-                           var html = $.parseHTML(relevantHtml);
-                           var links = $(".lyrics > p > a", data); 
-                           console.log($(".lyrics > p > a", data));
-                           //iterate over links and add onclick and remove href to <a>
-                           for(i = 0; i < links.length; i++) {
-                               links[i].removeAttribute("href");
-                               links[i].onclick(getAnnotations);
-                           }
-                           console.log(links);
                            chrome.tabs.query({active: true, currentWindow: true}, 
                                function(tabs) {
                                    chrome.tabs.sendMessage(tabs[0].id, 
-                                       {lyrics: relevantHtml.toString()},
+                                       {lyrics:  geniusHtml},
                                        function(response) {
                                        });
                                });
@@ -161,6 +147,10 @@ function openTab(data) {
             }
         }
     }
+};
+
+function annotationOnClick(id) {
+    alert(id);
 };
 
 /**

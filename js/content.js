@@ -43,12 +43,33 @@ document.addEventListener("DOMSubtreeModified", function() {
         //document.getElementById("watch-discussion").innerHTML = "";
 }, false);
 
+function consolidateHtml(str) {
+   var relevantHtml = str.substring(str.indexOf(" <div class=\"lyrics_container")+1);
+   relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
+    return relevantHtml;
 
+}
+function addOnClicks(relevantHtml) {
+   var html = $.parseHTML(relevantHtml);
+   var links = $(".lyrics > p > a", html); 
+   console.log($(".lyrics > p > a", html));
+   //iterate over links and add onclick and remove href to <a>
+   for(i = 0; i < links.length; i++) {
+       links[i].removeAttribute("href");
+       links[i].onclick = function() {
+           annotationOnClick(this.id)
+       };
+    }
+   return html;
+};
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from Extension");
-    console.log(request.lyrics);
+    //console.log(request.lyrics);
+    var str = consolidateHtml(request.lyrics);
+    var links = addOnClicks(str);
+    console.log(links);
     document.getElementById("watch-discussion").innerHTML = "";
-    document.getElementById("watch-discussion").innerHTML = request.lyrics;
+    document.getElementById("watch-discussion").innerHTML = str;
     
 
 });
