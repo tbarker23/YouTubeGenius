@@ -51,7 +51,7 @@ function consolidateHtml(str) {
 };
 
 function annotationOnClick() {
-    alert(this.id);    
+   chrome.runtime.sendMessage({action: "getAnnotation", id: this.id}, function(response) {});
 };
 
 function addOnClicks(relevantHtml) {

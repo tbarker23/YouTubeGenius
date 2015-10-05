@@ -1,6 +1,7 @@
 /* API keys and such */
 var youtubeApiUrl = "https://www.googleapis.com/youtube/v3/videos?id=";
 var geniusApiUrl = "http://api.genius.com/search?q=";
+var geniusAnnotationUrl = "http://api.genius.com/annotations/";
 var ytAccessKey = "key=AIzaSyDSnJWsRh_7hetLxutrfffzDT6V71iX_4w";
 var gAccessKey = "access_token=fW9FvH_s8IXkdHb_FusAmKV4jvSkyQJBvAKOXCrCuijTSoTEx8MxKlLWTqaj3opU";
 /* Global Error Messages */
@@ -224,7 +225,29 @@ function coalesceGeniusResults(resultSet, vidTitle) {
     }
 };
 
+function getAnnotation(id) {
+    console.log(geniusAnnotationUrl + id + "?" + gAccessKey);
+    $.ajax({
+        url: geniusAnnotationUrl + id + "?" + gAccessKey,
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            alert(data.response.annotation.toString);
+            //callback(data);
+        },
+        error: function(data) {
+            alert(geniusSongNotFound);
+            //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
+        }
+    });
+};    
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from geniusBtn");
-    window.PC = new PopupController();
+    if(request.action == "getAnnotation") {
+        //alert(request.id);
+        getAnnotation(request.id);
+    } else {
+        window.PC = new PopupController();
+    }
 });
