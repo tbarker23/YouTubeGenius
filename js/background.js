@@ -129,7 +129,7 @@ function openTab(data) {
                            chrome.tabs.query({active: true, currentWindow: true}, 
                                function(tabs) {
                                    chrome.tabs.sendMessage(tabs[0].id, 
-                                       {lyrics:  geniusHtml},
+                                       {action: "addLyrics2Page", lyrics:  geniusHtml},
                                        function(response) {
                                        });
                                });

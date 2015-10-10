@@ -39,10 +39,14 @@ document.addEventListener("DOMSubtreeModified", function() {
         document.getElementById("watch8-sentiment-actions").appendChild(geniusBtn);
 }, false);
 
-document.addEventListener("DOMSubtreeModified", function() {
-        //document.getElementById("watch-discussion").innerHTML = "";
-}, false);
-
+/**
+ * consolidateHtml - takes in a string of html gotten from curl on genius lyric page
+ * and splices out only the lyrics section defined by content between .lyrics_container
+ * and .song_footer
+ * @param str string of html
+ * @return relevantHtml spliced html of lyrics content
+ * @author tbarker
+ */
 function consolidateHtml(str) {
    var relevantHtml = str.substring(str.indexOf(" <div class=\"lyrics_container")+1);
    relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
@@ -51,9 +55,17 @@ function consolidateHtml(str) {
 };
 
 function annotationOnClick() {
-   chrome.runtime.sendMessage({action: "getAnnotation", id: this.id}, function(response) {});
+   chrome.runtime.sendMessage({action: "getAnnotation", id: this.id}, 
+           function(response) {});
 };
 
+/**
+ * addOnClicks - will take in an html string and access the <a> links in the <p> section
+ * will remove the href attribute and assign an ID based on the data-id.  
+ * @param relevantHtml - html string of lyrics
+ * @return links - DOM object of the relevanthtml with hrefs removed and ID added
+ * @author tbarker
+ */
 function addOnClicks(relevantHtml) {
    var html = $.parseHTML(relevantHtml);
    var links = $(".lyrics > p > *", html); 
@@ -69,6 +81,13 @@ function addOnClicks(relevantHtml) {
    return links;
 };
 
+/**
+ * setUpListeners - adds the annotationOnClick function to each of the <a>
+ * tags encountered in the genius lyrics.  this will be used instead of the href
+ * genius uses to bring up the annotations
+ * @return void
+ * @author tbarker
+ */
 function setUpListeners() {
     var i = 0;
     for(i = 0; i < linkIds.length; i++) {
@@ -78,15 +97,17 @@ function setUpListeners() {
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log("recieved event from Extension");
-    var str = consolidateHtml(request.lyrics);
-    var links = addOnClicks(str);
-    var output = "";
-    for(i = 0; i < links.length; i++) {
-        output += links[i].outerHTML
+    console.log("recieved event from Extension: " + request.action);
+    if(request.action == "addLyrics2Page") {
+        var str = consolidateHtml(request.lyrics);
+        var links = addOnClicks(str);
+        var output = "";
+        for(i = 0; i < links.length; i++) {
+            output += links[i].outerHTML
+        }
+        document.getElementById("watch-discussion").innerHTML = "";
+        document.getElementById("watch-discussion").innerHTML = output;
+        setUpListeners();
+        linkIds = [];
     }
-    document.getElementById("watch-discussion").innerHTML = "";
-    document.getElementById("watch-discussion").innerHTML = output;
-    setUpListeners();
-    linkIds = [];
 });
