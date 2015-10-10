@@ -88,4 +88,5 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     document.getElementById("watch-discussion").innerHTML = "";
     document.getElementById("watch-discussion").innerHTML = output;
     setUpListeners();
+    linkIds = [];
 });
