@@ -56,7 +56,7 @@ function annotationOnClick() {
 
 function addOnClicks(relevantHtml) {
    var html = $.parseHTML(relevantHtml);
-   var links = $(".lyrics > p > a", html); 
+   var links = $(".lyrics > p > *", html); 
    //iterate over links and add onclick and remove href to <a>
    for(i = 0; i < links.length; i++) {
        links[i].removeAttribute("href");
