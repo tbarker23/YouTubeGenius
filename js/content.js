@@ -60,8 +60,9 @@ function consolidateHtml(str) {
  * based on the id of the annotation.
  * @author tbarker
  */
-function annotationOnClick() {
-   chrome.runtime.sendMessage({action: "getAnnotation", id: this.id}, 
+function annotationOnClick(id) {
+    console.log("about to send getAnnotation: " + id);
+   chrome.runtime.sendMessage({action: "getAnnotation", id: id}, 
            function(response) {});
 };
 
@@ -74,16 +75,19 @@ function annotationOnClick() {
  */
 function addOnClicks(relevantHtml) {
    var html = $.parseHTML(relevantHtml);
-   var links = $(".lyrics > p > *", html); 
+   var links = $(".lyrics > p ", html);
+  console.log(links); 
    //iterate over links and add onclick and remove href to <a>
-   for(i = 0; i < links.length; i++) {
-       links[i].removeAttribute("href");
-       links[i].id = links[i].getAttribute("data-id");
-       linkIds.push(links[i].id);
-       links[i].onclick = function() {
+   for(i = 0; i < links[0].children.length; i++) {
+       if(links[0].children[i].tagName == 'A') {
+       links[0].children[i].removeAttribute("href");
+       links[0].children[i].id = links[0].children[i].getAttribute("data-id");
+       linkIds.push(links[0].children[i].id);
+       links[0].children[i].onclick = function() {
            annotationOnClick(this.id)
        };
     }
+   }
    return links;
 };
 
@@ -98,8 +102,14 @@ function setUpListeners() {
     var i = 0;
     for(i = 0; i < linkIds.length; i++) {
         var anchor = document.getElementById(linkIds[i]);
-        anchor.addEventListener('click', annotationOnClick, false);
-    }
+        //console.log(anchor);
+        console.log($('#'+linkIds[i]));
+        $('#'+linkIds[i]).click(function() {
+            annotationOnClick(this.id);
+        });
+        //anchor.addEventListener('click', annotationOnClick(linkIds[i]), false);
+        }
+    
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

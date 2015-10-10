@@ -244,7 +244,7 @@ function getAnnotation(id) {
             }
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id,
-                                        {action: "populateModal", annotation: str},
+                                        {action: "populateModal", annotation: html},
                                         function(response) {}
                                         );
             });
@@ -256,8 +256,9 @@ function getAnnotation(id) {
 };    
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log("recieved event from geniusBtn");
+    console.log("recieved event from geniusBtn: " + request.action);
     if(request.action == "getAnnotation") {
+        console.log(request.id);
         getAnnotation(request.id);
     } else {
         window.PC = new PopupController();
