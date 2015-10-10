@@ -96,6 +96,7 @@ function getGeniusInfo(data, callback) {
     });        
         
 };
+
 /**
  * OpenTab - takes the data from genius.com and makes sure there is a result
  * then will execute a new tab/new window with the genius url.
@@ -135,12 +136,6 @@ function openTab(data) {
                                });
                        }
                }); 
-                console.log("var set correct");
-                chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-                    chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, 
-                        function(response) {
-                        });
-                });
             }
         } else {
             if(geniusUrl != null) {
@@ -225,29 +220,37 @@ function coalesceGeniusResults(resultSet, vidTitle) {
     }
 };
 
+/**
+ * getAnnotation - uses the genius API to get a specific annotation based on the id 
+ * passed in.  the id is derived from the onclick in the content script from the 
+ * lryics displayed on the page.
+ * @param id id of annotation 
+ * @author tbarker
+ */
 function getAnnotation(id) {
-    console.log(geniusAnnotationUrl + id + "?" + gAccessKey);
     $.ajax({
         url: geniusAnnotationUrl + id + "?" + gAccessKey,
         dataType: 'json',
         success: function(data) {
-            var str = "";
-            console.log(data);
-            for(var i=0; i < data.response.annotation.body.dom.children.length; i++) {
-                if(data.response.annotation.body.dom.children[i].tag == "p") {
-                for(var j=0; 
-                    j < data.response.annotation.body.dom.children[i].children.length; 
-                    j++) {
-                        if(typeof data.response.annotation.body.dom.children[i].children[j] != "object") 
-                        str += data.response.annotation.body.dom.children[i].children[j];
-                        }
+            var annotations = data.response.annotation.body.dom.children;
+            var html = "";
+            for(var i=0; i < annotations.length; i++) {
+                if(annotations[i].tag == "p") {
+                    for(var j=0; j < annotations[i].children.length; j++) {
+                        if(typeof annotations[i].children[j] != "object") 
+                        html += annotations[i].children[j];
+                    }
                 }
-                }
-            alert(str);
+            }
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id,
+                                        {action: "populateModal", annotation: str},
+                                        function(response) {}
+                                        );
+            });
         },
         error: function(data) {
             alert(geniusSongNotFound);
-            //document.getElementById('statusMsg').innerHTML = geniusSongNotFound;
         }
     });
 };    
@@ -255,7 +258,6 @@ function getAnnotation(id) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from geniusBtn");
     if(request.action == "getAnnotation") {
-        //alert(request.id);
         getAnnotation(request.id);
     } else {
         window.PC = new PopupController();

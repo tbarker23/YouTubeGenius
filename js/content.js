@@ -54,6 +54,12 @@ function consolidateHtml(str) {
 
 };
 
+/**
+ * annotationOnClick - onclick handler for all the links in the lyrics returned 
+ * will send a message to the background page which will handle the api call to genius
+ * based on the id of the annotation.
+ * @author tbarker
+ */
 function annotationOnClick() {
    chrome.runtime.sendMessage({action: "getAnnotation", id: this.id}, 
            function(response) {});
@@ -109,5 +115,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         document.getElementById("watch-discussion").innerHTML = output;
         setUpListeners();
         linkIds = [];
+    }
+    else if(request.action == "populateModal") {
+        alert(request.annotation);
     }
 });
