@@ -123,8 +123,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         linkIds = [];
     }
     else if(request.action == "populateModal") {
-        console.log(request.annotation);
-        
         var overlay = (document.getElementById('overlay') !=  null ? 
             document.getElementById('overlay') : document.createElement('div'));
         overlay.id = "overlay";
