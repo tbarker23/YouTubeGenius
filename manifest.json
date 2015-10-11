@@ -26,6 +26,7 @@
       "matches": ["http://*/*",
                   "https://*/*"],
       "js": ["js/libs/jquery-2.1.4.min.js","js/content.js"],
+      "css": ["css/content.css"],
       "run_at": "document_end"
     }
   ],

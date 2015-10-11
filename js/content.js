@@ -76,7 +76,6 @@ function annotationOnClick(id) {
 function addOnClicks(relevantHtml) {
    var html = $.parseHTML(relevantHtml);
    var links = $(".lyrics > p ", html);
-  console.log(links); 
    //iterate over links and add onclick and remove href to <a>
    for(i = 0; i < links[0].children.length; i++) {
        if(links[0].children[i].tagName == 'A') {
@@ -102,14 +101,10 @@ function setUpListeners() {
     var i = 0;
     for(i = 0; i < linkIds.length; i++) {
         var anchor = document.getElementById(linkIds[i]);
-        //console.log(anchor);
-        console.log($('#'+linkIds[i]));
         $('#'+linkIds[i]).click(function() {
             annotationOnClick(this.id);
         });
-        //anchor.addEventListener('click', annotationOnClick(linkIds[i]), false);
-        }
-    
+    }
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -121,12 +116,26 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         for(i = 0; i < links.length; i++) {
             output += links[i].outerHTML
         }
+        output = '<p>' + output + '</p>';
         document.getElementById("watch-discussion").innerHTML = "";
         document.getElementById("watch-discussion").innerHTML = output;
         setUpListeners();
         linkIds = [];
     }
     else if(request.action == "populateModal") {
-        alert(request.annotation);
+        var overlay = document.createElement('div');
+        overlay.id = "overlay";
+        var innerDiv = document.createElement('div');
+        var pTag = document.createElement('p');
+        pTag.innerHTML = request.annotation; 
+
+        innerDiv.appendChild(pTag);
+        overlay.appendChild(innerDiv);
+        document.body.appendChild(overlay);
+
+        var e1 = document.getElementById("overlay");
+        e1.style.visibility = "visible"
+
+        //alert(request.annotation);
     }
 });
