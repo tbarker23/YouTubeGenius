@@ -123,19 +123,40 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         linkIds = [];
     }
     else if(request.action == "populateModal") {
-        var overlay = document.createElement('div');
+        console.log(request.annotation);
+        
+        var overlay = (document.getElementById('overlay') !=  null ? 
+            document.getElementById('overlay') : document.createElement('div'));
         overlay.id = "overlay";
+        
         var innerDiv = document.createElement('div');
+        
+        var closeBtn = document.createElement('span');
+        closeBtn.id = "closeBtn";
+        
         var pTag = document.createElement('p');
-        pTag.innerHTML = request.annotation; 
+        pTag.id = "annotationText";
 
+        pTag.innerHTML = "";
+        pTag.innerHTML = request.annotation; 
+        
+        closeBtn.innerHTML = "X";
+        closeBtn.onclick = function() {
+            var rehide = document.getElementById("overlay");
+            var youtubePage = document.getElementById("page");
+            youtubePage.style.opacity = "1";
+            rehide.style.visibility = "hidden";
+        };
+
+        innerDiv.appendChild(closeBtn);
         innerDiv.appendChild(pTag);
         overlay.appendChild(innerDiv);
         document.body.appendChild(overlay);
-
+        
+        var youtubePage = document.getElementById("page");
+        youtubePage.style.opacity = "0.4";
         var e1 = document.getElementById("overlay");
         e1.style.visibility = "visible"
-
         //alert(request.annotation);
     }
 });
