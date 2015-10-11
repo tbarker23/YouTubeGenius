@@ -113,10 +113,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         var str = consolidateHtml(request.lyrics);
         var links = addOnClicks(str);
         var output = "";
+        links[0].id = "lyricsContainer";
         for(i = 0; i < links.length; i++) {
             output += links[i].outerHTML
         }
-        output = '<p>' + output + '</p>';
+        output = output;
         document.getElementById("watch-discussion").innerHTML = "";
         document.getElementById("watch-discussion").innerHTML = output;
         setUpListeners();
@@ -155,6 +156,5 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         youtubePage.style.opacity = "0.4";
         var e1 = document.getElementById("overlay");
         e1.style.visibility = "visible"
-        //alert(request.annotation);
     }
 });
