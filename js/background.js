@@ -166,7 +166,7 @@ function consolidateQuery(vTitle) {
         var artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
         var artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
         var artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-        var artistInfo = artistInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+        var artistInfo = artistInfo.replace(/ft. +[A-z ]*/g, ""); //removes all ft. chars
         var artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
         var artistInfo = artistInfo.replace(/ *HD* */g, ""); 
         
@@ -174,7 +174,7 @@ function consolidateQuery(vTitle) {
         var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
         var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
         var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-        var trackInfo = trackInfo.replace(/ *ft.* */g, ""); //removes all ft. chars
+        var trackInfo = trackInfo.replace(/ft. +[A-z\u00C0-\u017F ]*/g, ""); //removes all ft. chars
         var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
         var trackInfo = trackInfo.replace(/HD/g, " ");
         console.log("consolidateQuery \t artistInfo = " + artistInfo 
@@ -232,6 +232,7 @@ function getAnnotation(id) {
         url: geniusAnnotationUrl + id + "?" + gAccessKey,
         dataType: 'json',
         success: function(data) {
+            console.log(data);
             var annotations = data.response.annotation.body.dom.children;
             var html = "";
             for(var i=0; i < annotations.length; i++) {

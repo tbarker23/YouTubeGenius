@@ -19,6 +19,7 @@ function createBtn() {
     btn.type = "image";
     var btnUrl = chrome.extension.getURL("images/genius.png");
     btn.src = btnUrl;
+    btn.className = "like-button-renderer actionable";
     
     //style it
     btn.style.width = "80px";
