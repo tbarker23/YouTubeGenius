@@ -161,22 +161,23 @@ function consolidateQuery(vTitle) {
         var artistInfo = str[0];
         var trackInfo = str[1];
 
-        console.log(str);
-        var artistInfo = artistInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and content
-        var artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-        var artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-        var artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-        var artistInfo = artistInfo.replace(/ft. +[A-z ]*/g, ""); //removes all ft. chars
-        var artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
-        var artistInfo = artistInfo.replace(/ *HD* */g, ""); 
+        artistInfo = artistInfo.replace(/ *\([^)]*\) */g, ""); //({})'s
+        artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //[{}]
+        artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //' x ' features
+        artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //,'s
+        artistInfo = artistInfo.replace(/ft. +[A-z ]*/g, ""); //ft. {}'s
+        artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //featuring's
+        artistInfo = artistInfo.replace(/HD [A-z\u00C0-\u017F, ]*/g, ""); //HD's
+        artistInfo = artistInfo.replace(/\+ [A-z\u00C0-\u017F, ]*/g, "");//+{}'s
         
-        var trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //removes parens and contents
-        var trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-        var trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-        var trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-        var trackInfo = trackInfo.replace(/ft. +[A-z\u00C0-\u017F ]*/g, ""); //removes all ft. chars
-        var trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //removes all featuring's
-        var trackInfo = trackInfo.replace(/HD/g, " ");
+        trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //({})'s
+        trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //[{}]'s
+        trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //' x ' features's
+        trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //,{}'s
+        trackInfo = trackInfo.replace(/ft. +[A-z\u00C0-\u017F, ]*/g, ""); //ft.'s
+        trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //featuring's
+        trackInfo = trackInfo.replace(/HD [A-z\u00C0-\u017F, ]*/g, " ");//HD's
+        trackInfo = trackInfo.replace(/\+ [A-z\u00C0-\u017F, ]*/g, "");//+{}'s
         console.log("consolidateQuery \t artistInfo = " + artistInfo 
                 + "\t trackInfo =" + trackInfo); 
         return artistInfo + trackInfo;
@@ -186,7 +187,7 @@ function consolidateQuery(vTitle) {
         var vTitle = vTitle.replace(/ *\[.*\]* */g, ""); //removes squares and contents
         var vTitle = vTitle.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
         var vTitle = vTitle.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-        var vTitle = vTitle.replace(/ *ft.* */g, ""); //removes all ft. chars
+        var vTitle = vTitle.replace(/ft. +[A-z\u00C0-\u017F,]*/g, ""); //removes all ft. chars
         var vTitle = vTitle.replace(/ *featuring.* */g, ""); //removes all featuring's
         var vTitle = vTitle.replace(/ *HD* */g, "");
 
