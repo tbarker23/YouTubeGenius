@@ -83,6 +83,7 @@ function getGeniusInfo(data, callback) {
         alert(youtubeErrorMsg);
     var vidTitle = data.items[0].snippet.title;
     referenceTitle = consolidateQuery(vidTitle);
+    console.log(referenceTitle);
     $.ajax({
         url: geniusApiUrl + referenceTitle + "&" + gAccessKey,
         dataType: 'json',
@@ -161,20 +162,20 @@ function consolidateQuery(vTitle) {
         var artistInfo = str[0];
         var trackInfo = str[1];
 
-        artistInfo = artistInfo.replace(/ *\([^)]*\) */g, ""); //({})'s
-        artistInfo = artistInfo.replace(/ *\[.*\]* */g, ""); //[{}]
-        artistInfo = artistInfo.replace(/ *\sx\s* */g, " "); //' x ' features
+        artistInfo = artistInfo.replace(/\([^)]*\)/g, ""); //({})'s
+        artistInfo = artistInfo.replace(/\[.*\]/g, ""); //[{}]
+        artistInfo = artistInfo.replace(/\sx\s*/g, " "); //' x ' features
         artistInfo = artistInfo.replace(/ *,.*\- /g, "-"); //,'s
         artistInfo = artistInfo.replace(/ft. +[A-z ]*/g, ""); //ft. {}'s
         artistInfo = artistInfo.replace(/ *featuring.* */g, ""); //featuring's
         artistInfo = artistInfo.replace(/HD [A-z\u00C0-\u017F, ]*/g, ""); //HD's
         artistInfo = artistInfo.replace(/\+ [A-z\u00C0-\u017F, ]*/g, "");//+{}'s
         
-        trackInfo = trackInfo.replace(/ *\([^)]*\) */g, ""); //({})'s
-        trackInfo = trackInfo.replace(/ *\[.*\]* */g, ""); //[{}]'s
-        trackInfo = trackInfo.replace(/ *\sx\s* */g, " "); //' x ' features's
+        trackInfo = trackInfo.replace(/\([^)]*\)/g, ""); //({})'s
+        trackInfo = trackInfo.replace(/\[.*\]/g, ""); //[{}]'s
+        trackInfo = trackInfo.replace(/\sx\s*/g, " "); //' x ' features's
         trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //,{}'s
-        trackInfo = trackInfo.replace(/ft. +[A-z\u00C0-\u017F, ]*/g, ""); //ft.'s
+        trackInfo = trackInfo.replace(/ft. +[A-z\u00C0-\u017F, ]*/g, ""); //ft. {}'s
         trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //featuring's
         trackInfo = trackInfo.replace(/HD [A-z\u00C0-\u017F, ]*/g, " ");//HD's
         trackInfo = trackInfo.replace(/\+ [A-z\u00C0-\u017F, ]*/g, "");//+{}'s
@@ -183,13 +184,14 @@ function consolidateQuery(vTitle) {
         return artistInfo + trackInfo;
     } else {
         //for weird videos without the - separating artist/title
-        var vTitle = vTitle.replace(/ *\([^)]*\) */g, ""); //removes parens and content
-        var vTitle = vTitle.replace(/ *\[.*\]* */g, ""); //removes squares and contents
-        var vTitle = vTitle.replace(/ *\sx\s* */g, " "); //removes all ' x ' features
-        var vTitle = vTitle.replace(/ *,.*\- /g, "-"); //replaces featurings with comms
-        var vTitle = vTitle.replace(/ft. +[A-z\u00C0-\u017F,]*/g, ""); //removes all ft. chars
-        var vTitle = vTitle.replace(/ *featuring.* */g, ""); //removes all featuring's
-        var vTitle = vTitle.replace(/ *HD* */g, "");
+        vTitle = vTitle.replace(/\([^)]*\)/g, ""); //({})'s
+        vTitle = vTitle.replace(/\[.*\]/g, ""); //[{}]'s
+        vTitle = vTitle.replace(/\sx\s*/g, " "); //' x ' features
+        vTitle = vTitle.replace(/ *,.*\- /g, "-"); //,{}'s
+        vTitle = vTitle.replace(/ft. +[A-z\u00C0-\u017F,]*/g, ""); //ft. {}'
+        vTitle = vTitle.replace(/ *featuring.* */g, ""); //featuring's
+        vTitle = vTitle.replace(/HD [A-z\u00C0-\u017F, ]*/g, ""); //HD's
+        vTitle = vTitle.replace(/\+ [A-z\u00C0-\u017F, ]*/g, "");//+{}'s
 
         return vTitle;
     } 
@@ -207,7 +209,7 @@ function consolidateQuery(vTitle) {
 function coalesceGeniusResults(resultSet, vidTitle) {
     var result = {};
     var i = 0;
-    //console.log(resultSet); //results returned from genius api
+    console.log(resultSet); //results returned from genius api
     if(resultSet.length > 0) {
         for(i = 0; i < resultSet.length; i++) {
             if(vidTitle.toLowerCase().indexOf(resultSet[i].result.title.toLowerCase()) 

@@ -108,10 +108,52 @@ function setUpListeners() {
     }
 };
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log("recieved event from Extension: " + request.action);
-    if(request.action == "addLyrics2Page") {
-        var str = consolidateHtml(request.lyrics);
+/**
+ * createAnnnotationModal - Creates the DOM for the popup modal that wil display
+ * the genius annotation for lyrics.
+ * TODO Make this look better
+ * @param annotationText innerHTML of annotation for relevant description
+ * @author tbarker
+ */
+function createAnnotationModal(annotationText) {
+    var overlay = (document.getElementById('overlay') !=  null ? 
+        document.getElementById('overlay') : document.createElement('div'));
+    overlay.id = "overlay";
+    
+    var innerDiv = document.createElement('div');
+    
+    var closeBtn = document.createElement('span');
+    closeBtn.id = "closeBtn";
+    
+    var pTag = document.createElement('p');
+    pTag.id = "annotationText";
+
+    pTag.innerHTML = "";
+    pTag.innerHTML = annotationText; 
+    
+    closeBtn.innerHTML = "X";
+    closeBtn.onclick = function() {
+        var rehide = document.getElementById("overlay");
+        var youtubePage = document.getElementById("page");
+        youtubePage.style.opacity = "1";
+        rehide.style.visibility = "hidden";
+    };
+
+    innerDiv.appendChild(closeBtn);
+    innerDiv.appendChild(pTag);
+    overlay.appendChild(innerDiv);
+    document.body.appendChild(overlay);
+};
+
+/**
+ * addLyricsToPage - overlays the lyrics returned from the genius API on the comment
+ * section of the YouTube page.  TODO if youtube layout changes watch-discussions will 
+ * have to be changed to the new id of the new comment section.
+ * @param lyrics innerHTML of lyric container from genius lyric page
+ * @author tbarker
+ */
+function addLyricsToPage(lyrics) {
+        var str = consolidateHtml(lyrics);
         var links = addOnClicks(str);
         var output = "";
         links[0].id = "lyricsContainer";
@@ -123,39 +165,24 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         document.getElementById("watch-discussion").innerHTML = output;
         setUpListeners();
         linkIds = [];
+};
+
+/**
+ * MAIN (listener for messages from background.js)
+ * @author tbarker
+ */
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    console.log("recieved event from Extension: " + request.action);
+    if(request.action == "addLyrics2Page") {
+        addLyricsToPage(request.lyrics);
     }
     else if(request.action == "populateModal") {
-        var overlay = (document.getElementById('overlay') !=  null ? 
-            document.getElementById('overlay') : document.createElement('div'));
-        overlay.id = "overlay";
-        
-        var innerDiv = document.createElement('div');
-        
-        var closeBtn = document.createElement('span');
-        closeBtn.id = "closeBtn";
-        
-        var pTag = document.createElement('p');
-        pTag.id = "annotationText";
-
-        pTag.innerHTML = "";
-        pTag.innerHTML = request.annotation; 
-        
-        closeBtn.innerHTML = "X";
-        closeBtn.onclick = function() {
-            var rehide = document.getElementById("overlay");
-            var youtubePage = document.getElementById("page");
-            youtubePage.style.opacity = "1";
-            rehide.style.visibility = "hidden";
-        };
-
-        innerDiv.appendChild(closeBtn);
-        innerDiv.appendChild(pTag);
-        overlay.appendChild(innerDiv);
-        document.body.appendChild(overlay);
+        createAnnotationModal(request.annotation); 
         
         var youtubePage = document.getElementById("page");
         youtubePage.style.opacity = "0.4";
-        var e1 = document.getElementById("overlay");
-        e1.style.visibility = "visible"
+        
+        var overlay = document.getElementById("overlay");
+        overlay.style.visibility = "visible"
     }
 });
