@@ -4,7 +4,11 @@
   "name": "YouTube Genius",
   "description": "This extension shows the Genius.com lyrics and annotations for a YouTube video",
   "version": "2.1",
-
+  "icons": {
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
+  },
   "background": {
       "persistent": true, 
       "scripts": ["js/libs/jquery-2.1.4.min.js", "js/background.js"]
@@ -23,8 +27,10 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://*/*",
-                  "*://www.youtube.com/watch?v=*"],
+      "matches": ["http://youtube.com/*",
+                  "http://www.youtube.com/*",
+                  "https://youtube.com/*",
+                  "https://www.youtube.com/*"],
       "js": ["js/libs/jquery-2.1.4.min.js","js/content.js"],
       "css": ["css/content.css"],
       "run_at": "document_end"
