@@ -23,7 +23,9 @@
     "webNavigation",
     "https://ajax.googleapis.com/",
     "*://youtube.com/*",
-    "*://www.youtube.com/*"
+    "*://www.youtube.com/*",
+    "*://www.genius.com/*",
+    "*://genius.com/*"
   ],
   "content_scripts": [
     {
