@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(chrome.extension.getBackgroundPage().getPref() == "newWin")
         newWinRadio.checked = true;
-    if(chrome.extension.getBackgroundPage().getPref() == "inPage")
+    else if(chrome.extension.getBackgroundPage().getPref() == "inPage")
         inPageCommentRadio.checked= true;
     else
         newTabRadio.checked = true;

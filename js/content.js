@@ -53,7 +53,7 @@ function consolidateHtml(str) {
    relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
     return relevantHtml;
 
-};
+}
 
 /**
  * annotationOnClick - onclick handler for all the links in the lyrics returned 
@@ -65,7 +65,7 @@ function annotationOnClick(id) {
     console.log("about to send getAnnotation: " + id);
    chrome.runtime.sendMessage({action: "getAnnotation", id: id}, 
            function(response) {});
-};
+}
 
 /**
  * addOnClicks - will take in an html string and access the <a> links in the <p> section
@@ -84,12 +84,12 @@ function addOnClicks(relevantHtml) {
        links[0].children[i].id = links[0].children[i].getAttribute("data-id");
        linkIds.push(links[0].children[i].id);
        links[0].children[i].onclick = function() {
-           annotationOnClick(this.id)
+           annotationOnClick(this.id);
        };
     }
    }
    return links;
-};
+}
 
 /**
  * setUpListeners - adds the annotationOnClick function to each of the <a>
@@ -106,7 +106,7 @@ function setUpListeners() {
             annotationOnClick(this.id);
         });
     }
-};
+}
 
 /**
  * createAnnnotationModal - Creates the DOM for the popup modal that wil display
@@ -116,7 +116,7 @@ function setUpListeners() {
  * @author tbarker
  */
 function createAnnotationModal(annotationText) {
-    var overlay = (document.getElementById('overlay') !=  null ? 
+    var overlay = (document.getElementById('overlay') !==  null ? 
         document.getElementById('overlay') : document.createElement('div'));
     overlay.id = "overlay";
     
@@ -143,7 +143,7 @@ function createAnnotationModal(annotationText) {
     innerDiv.appendChild(pTag);
     overlay.appendChild(innerDiv);
     document.body.appendChild(overlay);
-};
+}
 
 /**
  * addLyricsToPage - overlays the lyrics returned from the genius API on the comment
@@ -158,14 +158,14 @@ function addLyricsToPage(lyrics) {
         var output = "";
         links[0].id = "lyricsContainer";
         for(i = 0; i < links.length; i++) {
-            output += links[i].outerHTML
+            output += links[i].outerHTML;
         }
         output = output;
         document.getElementById("watch-discussion").innerHTML = "";
         document.getElementById("watch-discussion").innerHTML = output;
         setUpListeners();
         linkIds = [];
-};
+}
 
 /**
  * MAIN (listener for messages from background.js)
@@ -183,6 +183,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         youtubePage.style.opacity = "0.4";
         
         var overlay = document.getElementById("overlay");
-        overlay.style.visibility = "visible"
+        overlay.style.visibility = "visible";
     }
 });

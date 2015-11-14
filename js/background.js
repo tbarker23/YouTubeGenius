@@ -16,10 +16,10 @@ var populatePref = ""; //default setting newTab ['newTab' || 'newWin']
 function setPref(str) {
     console.log(str);
     populatePref = str;
-};
+}
 function getPref() {
     return populatePref;
-};
+}
 
 /**
  * PopupController - main controller of the extension.  invoked from button click in content.js
@@ -48,7 +48,7 @@ function getUrl(callback) {
                 var url = tab.url;
                 callback(url);
     });
-};
+}
 
 /**
  * getYouTubeInfo - executes the api call to googleapis.com (youtube) after getting
@@ -79,7 +79,7 @@ var getYoutubeInfo=function(url, callback) {
  */
 function getGeniusInfo(data, callback) {
     //console.log(data); //info from youtube api
-    if(data.items.length == 0)
+    if(data.items.length === 0)
         alert(youtubeErrorMsg);
     var vidTitle = data.items[0].snippet.title;
     referenceTitle = consolidateQuery(vidTitle);
@@ -96,7 +96,7 @@ function getGeniusInfo(data, callback) {
         }
     });        
         
-};
+}
 
 /**
  * OpenTab - takes the data from genius.com and makes sure there is a result
@@ -104,26 +104,26 @@ function getGeniusInfo(data, callback) {
  * @param {object} data JSON obj recieved from api.genius.com
  */
 function openTab(data) {
-    if(data.response.hits.size == 0) {
+    if(data.response.hits.size === 0) {
         alert(geniusSongNotFound);
     } else {
         var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
         if(populatePref == "newWin") {
-            if(geniusUrl != null) {
+            if(geniusUrl !== null) {
                 chrome.windows.getCurrent(function(win) {
-                    chrome.windows.update(win.id, {width: screen.width*.5});
+                    chrome.windows.update(win.id, {width: screen.width * 0.5});
                 });
                 
                 chrome.windows.create({
                     url: geniusUrl, 
                     left: screen.width, 
-                    width: screen.width*.5, 
+                    width: screen.width * 0.5, 
                     height: screen.height }, function(data){
                         geniusWinId = data.id;
                 });
             } 
         } else if(populatePref == "inPage") {
-            if(geniusUrl != null) {
+            if(geniusUrl !== null) {
                $.ajax({url: geniusUrl, 
                        success: function(data) {
                            var i = 0;
@@ -139,16 +139,16 @@ function openTab(data) {
                }); 
             }
         } else {
-            if(geniusUrl != null) {
+            if(geniusUrl !== null) {
                 chrome.tabs.create({url: geniusUrl});
             }
         }
     }
-};
+}
 
 function annotationOnClick(id) {
     alert(id);
-};
+}
 
 /**
  * consolidateQuery - will take in the title of a youtube content video and strip out
@@ -221,7 +221,7 @@ function coalesceGeniusResults(resultSet, vidTitle) {
     } else {
         alert(geniusSongNotFound);
     }
-};
+}
 
 /**
  * getAnnotation - uses the genius API to get a specific annotation based on the id 
@@ -257,7 +257,7 @@ function getAnnotation(id) {
             alert(geniusSongNotFound);
         }
     });
-};    
+}    
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from geniusBtn: " + request.action);
