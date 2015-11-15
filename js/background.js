@@ -238,12 +238,22 @@ function getAnnotation(id) {
             console.log(data);
             var annotations = data.response.annotation.body.dom.children;
             var html = "";
+            console.log(annotations);
             for(var i=0; i < annotations.length; i++) {
                 if(annotations[i].tag == "p") {
+                    html += "<" + annotations[i].tag + ">";
                     for(var j=0; j < annotations[i].children.length; j++) {
                         if(typeof annotations[i].children[j] != "object") 
                         html += annotations[i].children[j];
                     }
+                    if(Array.isArray(annotations[i].children)) {
+                      for(var k=0; k < annotations[i].children.length; k++) {
+                        if(annotations[i].children[k].tag == "img") {
+                          html += "<img style=\"width: 200px;\" src=\"" + annotations[i].children[k].attributes.src + "\" />";
+                        }
+                      }
+                    }
+                    html += "<" + annotations[i].tag + "/>";
                 }
             }
             chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
