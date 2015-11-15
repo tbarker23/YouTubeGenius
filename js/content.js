@@ -121,8 +121,8 @@ function createAnnotationModal(annotationText) {
     overlay.id = "overlay";
     
     var innerDiv = document.createElement('div');
-    //var titleText = document.createElement('span');
-  //  titleText.id = "titleText";
+    var titleText = document.createElement('span');
+    titleText.id = "titleText";
     var closeBtn = document.createElement('span');
     closeBtn.id = "closeBtn";
     
@@ -133,14 +133,14 @@ function createAnnotationModal(annotationText) {
     pTag.innerHTML = annotationText; 
     
     closeBtn.innerHTML = "X";
-//    titleText.innerHTML = "Genius.com Annotation";
+    titleText.innerHTML = "Genius.com Says: ";
     closeBtn.onclick = function() {
         var rehide = document.getElementById("overlay");
         var youtubePage = document.getElementById("page");
         youtubePage.style.opacity = "1";
         rehide.style.visibility = "hidden";
     };
-
+    innerDiv.appendChild(titleText);
     innerDiv.appendChild(closeBtn);
     innerDiv.appendChild(pTag);
     overlay.appendChild(innerDiv);

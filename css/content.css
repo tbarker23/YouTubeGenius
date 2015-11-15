@@ -24,6 +24,11 @@
     border-radius: 3%;
 }
 
+#titleText {
+    color: #ffff64;
+    font-weight: bold;
+}
+
 #closeBtn {
     background-color: #ffff64;
     color: black;

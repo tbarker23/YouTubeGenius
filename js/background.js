@@ -174,7 +174,7 @@ function consolidateQuery(vTitle) {
         trackInfo = trackInfo.replace(/\([^)]*\)/g, ""); //({})'s
         trackInfo = trackInfo.replace(/\[.*\]/g, ""); //[{}]'s
         trackInfo = trackInfo.replace(/\sx\s*/g, " "); //' x ' features's
-        trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //,{}'s
+        trackInfo = trackInfo.replace(/ *,.*\- /g, "-"); //,'s
         trackInfo = trackInfo.replace(/ft. +[A-z\u00C0-\u017F, ]*/g, ""); //ft. {}'s
         trackInfo = trackInfo.replace(/ *featuring.* */g, ""); //featuring's
         trackInfo = trackInfo.replace(/HD [A-z\u00C0-\u017F, ]*/g, " ");//HD's
