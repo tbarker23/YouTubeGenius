@@ -139,8 +139,6 @@ function createAnnotationModal(annotationText) {
   titleText.innerHTML = "Genius.com Says: ";
   closeBtn.onclick = function() {
     var rehide = document.getElementById("overlay");
-    var youtubePage = document.getElementById("page");
-    //youtubePage.style.opacity = "1";
     rehide.style.visibility = "hidden";
   };
   innerDiv.appendChild(titleText);
@@ -186,6 +184,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         addLyricsToPage(request.lyrics);
     }
     else if(request.action == "populateModal") {
+        //remove old overlay if its there
+        $('#overlay').remove();
         createAnnotationModal(request.annotation); 
         
         var youtubePage = document.getElementById("page");
