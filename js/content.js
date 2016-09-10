@@ -49,8 +49,8 @@ document.addEventListener("DOMSubtreeModified", function() {
  * @author tbarker
  */
 function consolidateHtml(str) {
-   var relevantHtml = str.substring(str.indexOf(" <div class=\"lyrics_container")+1);
-   relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("<div class=\"song_footer\">"));
+   var relevantHtml = str.substring(str.indexOf("<lyrics *>")+1);
+   relevantHtml = relevantHtml.substring(0,relevantHtml.indexOf("</lyrics>"));
     return relevantHtml;
 
 }
@@ -75,8 +75,12 @@ function annotationOnClick(id) {
  * @author tbarker
  */
 function addOnClicks(relevantHtml) {
-   var html = $.parseHTML(relevantHtml);
-   var links = $(".lyrics > p ", html);
+   var relHTML = relevantHtml.replace("<p>", "");
+   relHTML = relHTML.replace("</p>", "");
+   var html = $.parseHTML(relHTML);
+   //console.log(relevantHtml);
+   var links = $(".lyrics  ", html);
+   console.log(links);
    //iterate over links and add onclick and remove href to <a>
    for(i = 0; i < links[0].children.length; i++) {
        if(links[0].children[i].tagName == 'A') {
@@ -86,7 +90,7 @@ function addOnClicks(relevantHtml) {
        links[0].children[i].onclick = function() {
            annotationOnClick(this.id);
        };
-    }
+     }
    }
    return links;
 }
@@ -156,7 +160,9 @@ function createAnnotationModal(annotationText) {
  */
 function addLyricsToPage(lyrics) {
         var str = consolidateHtml(lyrics);
+        //console.log(str);
         var links = addOnClicks(str);
+        console.log(links);
         var output = "";
         links[0].id = "lyricsContainer";
         for(i = 0; i < links.length; i++) {
@@ -176,6 +182,7 @@ function addLyricsToPage(lyrics) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from Extension: " + request.action);
     if(request.action == "addLyrics2Page") {
+      //console.log(request.lyrics);
         addLyricsToPage(request.lyrics);
     }
     else if(request.action == "populateModal") {
