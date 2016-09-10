@@ -1,61 +1,60 @@
 #overlay {
-    visibility: hidden;
-    position: absolute;
-    top: 0%;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    z-index: 1000;
+  visibility: hidden;
+  position: absolute;
+  top: 0%;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: 1000;
 }
 
 #overlay div {
-    position: fixed;
-    width: 300px;
-    //height: 200px;
-    margin: 100px auto;
-    background-color: #3A3A3A;
-    border: 1px solid #000;
-    padding: 15px;
-    text-align: center;
-    opacity: 1;
-    top: 15%;
-    left: 40%;
-    border-radius: 3%;
+  position: fixed;
+  width: 300px;
+  height: 200px;
+  margin: 100px auto;
+  background-color: #3A3A3A;
+  border: 1px solid #000;
+  padding: 15px;
+  text-align: center;
+  opacity: 1;
+  top: 15%;
+  left: 40%;
+  border-radius: 3%;
 }
 
 #titleText {
-    color: #ffff64;
-    font-weight: bold;
+  color: #ffff64;
+  font-weight: bold;
 }
 
 #closeBtn {
-    background-color: #ffff64;
-    color: black;
-    height: 20px;
-    width: 20px;
-    font-size: large;
-    float: right;
-    margin-top: -10px;
-    margin-right: -5px;
-    cursor: pointer;
+  background-color: #ffff64;
+  color: black;
+  height: 20px;
+  width: 20px;
+  font-size: large;
+  float: right;
+  margin-top: -10px;
+  margin-right: -5px;
+  cursor: pointer;
 }
 
 #annotationText {
-    margin-top: 15px;
-    color: #ffffff;
+  margin-top: 15px;
+  color: #ffffff;
 }
 
 #lyricsContainer {
-    background-color: #616161;
-    color: #ffff64;
+  background-color: #616161;
+  color: #ffff64;
 }
 
 #lyricsContainer > a {
-    color: #ffff64;
-    background-color: #3A3A3A;
+  color: #ffff64;
+  background-color: #3A3A3A;
 }
-
 #lyricsContainer > a.active {
   background-color: #ffff64;
   color: #3A3A3A;

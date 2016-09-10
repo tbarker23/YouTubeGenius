@@ -1,35 +1,35 @@
 #popup-body {
-    width: 400px;
+  width: 400px;
 }
 
 .YTGHeading {
-    display: flex;
-    display: -webkit-flex;
-    align-content: center;
-    justify-content: center;
+  display: flex;
+  display: -webkit-flex;
+  align-content: center;
+  justify-content: center;
 }
 
 .YTGHeading > img {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 
 .YTGHeading-text {
-    font-size: large;
-    align-self: center;
+  font-size: large;
+  align-self: center;
 }
 
 .radioContainer {
-    display: flex;
-    display: -webkit-flex;
-    align-content: center;
-    -webkit-align-content: center;
-    justify-content: flex-start;
-    -webkit-justify-content: flex-start;
+  display: flex;
+  display: -webkit-flex;
+  align-content: center;
+  -webkit-align-content: center;
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
 }
 
 .radioContainer > span {
-    align-self: center;
-    -webkit-align-self: center;
-    font-size: small;
+  align-self: center;
+  -webkit-align-self: center;
+  font-size: small;
 }
