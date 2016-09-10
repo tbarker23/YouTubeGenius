@@ -156,12 +156,12 @@ function createAnnotationModal(annotationText) {
  * @param lyrics innerHTML of lyric container from genius lyric page
  * @author tbarker
  */
-function addLyricsToPage(lyrics) {
+function addLyricsToPage(lyrics, title) {
   var str = consolidateHtml(lyrics);
   //console.log(str);
   var links = addOnClicks(str);
   //console.log(links);
-  var output = "";
+  var output = "<div class='lyric-title-container'>" + "<h2 class='lyric-title'>" + title + "</h2>" + "</div>";
   links[0].id = "lyricsContainer";
   for(i = 0; i < links.length; i++) {
     output += links[i].outerHTML;
@@ -181,7 +181,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from Extension: " + request.action);
     if(request.action == "addLyrics2Page") {
       //console.log(request.lyrics);
-        addLyricsToPage(request.lyrics);
+      console.log(request);
+      addLyricsToPage(request.lyrics, request.title);
     }
     else if(request.action == "populateModal") {
         //remove old overlay if its there

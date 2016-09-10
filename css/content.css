@@ -45,7 +45,7 @@
 
 #lyricsContainer {
   color: #000000;
-  background-color: #DDDDDD;
+  background-color: white;
   font-family: Whitney,sans-serif;
   font-size: 1.25em;
 }
@@ -59,6 +59,15 @@
 #lyricsContainer > a:hover {
   background-color: #FFFF64;
   text-decoration: none;
+}
+.lyric-title-container {
+  display: flex;
+  -webkit-display: flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+}
+.lyric-title {
+  display: flex;
 }
 
 #lyricsContainer > a.active {

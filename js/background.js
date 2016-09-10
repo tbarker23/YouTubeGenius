@@ -108,6 +108,7 @@ function openTab(data) {
     alert(geniusSongNotFound);
   } else {
     var geniusUrl = coalesceGeniusResults(data.response.hits, referenceTitle);
+    var geniusTitle = getGeniusTitle(data.response.hits, referenceTitle);
     if(populatePref == "newWin") {
       if(geniusUrl !== null) {
         chrome.windows.getCurrent(function(win) {
@@ -123,6 +124,7 @@ function openTab(data) {
         });
       } 
     } else if(populatePref == "inPage") {
+      console.log(data);
       if(geniusUrl !== null) {
         $.ajax({url: geniusUrl, 
             success: function(data) {
@@ -131,7 +133,7 @@ function openTab(data) {
              chrome.tabs.query({active: true, currentWindow: true}, 
                  function(tabs) {
                      chrome.tabs.sendMessage(tabs[0].id, 
-                         {action: "addLyrics2Page", lyrics:  geniusHtml},
+                         {action: "addLyrics2Page", lyrics:  geniusHtml, title: geniusTitle},
                          function(response) {
                          });
                   }
@@ -224,6 +226,20 @@ function coalesceGeniusResults(resultSet, vidTitle) {
     }
 }
 
+function getGeniusTitle(resultSet, vidTitle) {
+  var result = {};
+  var i = 0;
+  //console.log(resultSet); //results returned from genius api
+  if(resultSet.length > 0) {
+    for(i = 0; i < resultSet.length; i++) {
+      if(vidTitle.toLowerCase().indexOf(resultSet[i].result.title.toLowerCase()) 
+                                              > -1){
+            return resultSet[i].result.full_title;
+      }
+    }    
+    return resultSet[0].result.full_title;
+  }
+}
 /**
  * getAnnotation - uses the genius API to get a specific annotation based on the id 
  * passed in.  the id is derived from the onclick in the content script from the 
