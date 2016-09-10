@@ -79,7 +79,7 @@ function addOnClicks(relevantHtml) {
    
   var html = $.parseHTML(relHTML);
    //console.log(relevantHtml);
-  var links = $(".lyrics  ", html);
+  var links = $(".lyrics > p", html);
    //iterate over links and add onclick and remove href to <a>
   for(i = 0; i < links[0].children.length; i++) {
     if(links[0].children[i].tagName == 'A') {
