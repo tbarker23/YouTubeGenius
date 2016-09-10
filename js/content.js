@@ -61,11 +61,11 @@ function consolidateHtml(str) {
  * @author tbarker
  */
 function annotationOnClick(id) {
+  
   console.log("about to send getAnnotation: " + id);
   chrome.runtime.sendMessage({action: "getAnnotation", id: id}, 
                               function(response) {});
 }
-
 /**
  * addOnClicks - will take in an html string and access the <a> links in the <p>
  * section will remove the href attribute and assign an ID based on the data-id.  
@@ -140,7 +140,7 @@ function createAnnotationModal(annotationText) {
   closeBtn.onclick = function() {
     var rehide = document.getElementById("overlay");
     var youtubePage = document.getElementById("page");
-    youtubePage.style.opacity = "1";
+    //youtubePage.style.opacity = "1";
     rehide.style.visibility = "hidden";
   };
   innerDiv.appendChild(titleText);
@@ -189,7 +189,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         createAnnotationModal(request.annotation); 
         
         var youtubePage = document.getElementById("page");
-        youtubePage.style.opacity = "0.4";
+        //youtubePage.style.opacity = "0.4";
         
         var overlay = document.getElementById("overlay");
         overlay.style.visibility = "visible";
