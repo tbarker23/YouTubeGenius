@@ -80,8 +80,8 @@ function addOnClicks(relevantHtml) {
   relHTML = relHTML.replace("</p>", "");
    
   var html = $.parseHTML(relHTML);
-   //console.log(relevantHtml);
-  var links = $(".lyrics > p", html);
+  //console.log(relevantHtml);
+  var links = $(".lyrics", html);
    //iterate over links and add onclick and remove href to <a>
   for(i = 0; i < links[0].children.length; i++) {
     if(links[0].children[i].tagName == 'A') {
@@ -183,8 +183,8 @@ function addLyricsToPage(lyrics, title) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     console.log("recieved event from Extension: " + request.action);
     if(request.action == "addLyrics2Page") {
-      //console.log(request.lyrics);
-      console.log(request);
+    //  console.log(request.lyrics);
+    //  console.log(request);
       addLyricsToPage(request.lyrics, request.title);
     }
     else if(request.action == "populateModal") {
