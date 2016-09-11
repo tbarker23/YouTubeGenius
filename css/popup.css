@@ -1,5 +1,5 @@
 #popup-body {
-  width: 400px;
+  width: 200px;
 }
 
 .YTGHeading {
@@ -32,4 +32,11 @@
   align-self: center;
   -webkit-align-self: center;
   font-size: small;
+}
+
+.popup-menu-item {
+  padding: 2px;
+}
+.popup-menu-item:hover {
+  background: #e3e3e3;
 }

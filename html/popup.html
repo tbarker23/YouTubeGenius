@@ -12,41 +12,16 @@
     <script src="../js/myscript.js"></script>
     <script src="../js/popup.js"></script>
   </head>
-  <body id="popup-body" style="width: 400px;">
+  <body id="popup-body" style="width: 200px;">
     <div class="YTGHeading">
       <img src="../images/icon.png">
       <span class="YTGHeading-text">YouTube Genius</span>
     </div>
-    <ul class="dropdown">
-      <li>New Tab</li>
-      <li>Split Screen</li>
-      <li>Comment Section</li>
-    </ul>
-    
-   
-    </div>
-  <footer>
-    <p>
-      <a style="margin-left: 45%;" id="openHelpBtn" href"">Help & About</a>
-    </p>
-  </footer>
+    <form style="margin-left: 5px;">
+      <div class="popup-menu-item"> <input id="newTabRadio" type="radio" name="clickPref" value="newTab"><span>New Tab</span></div>
+      <div class="popup-menu-item"><input id="newWinRadio" type="radio" name="clickPref" value="newWin"><span>Split Screen</span></div>
+      <div class="popup-menu-item"><input id="inPageCommentRadio" type="radio" name="clickPref" value="inPage"><span>Comment Section</span></div>
+      <div id="openHelpBtn" class="popup-menu-item">Help & About</div>
+    </form>
   </body>
 </html>
-
-<!--
- <div class="settingsContainer">
-      <div style="font-size: medium;">Settings</div>
-      <form id="clickPreferenceForm">
-          <div class="radioContainer">
-            <input id="newTabRadio" type="radio" name="clickPref" value="newTab"> 
-              <span>New tab when Genius button clicked </span>
-          </div>
-          <div class="radioContainer">
-            <input id="newWinRadio" type="radio" name="clickPref" value="newWin"> 
-            <span>New window when Genius button clicked</span>
-          </div>
-          <div class="radioContainer">
-            <input id="inPageCommentRadio" type="radio" name="clickPref" value="inPage">
-            <span> Populate comment section with Genius lyrics</span>
-          </div>
-      </form> -->
