@@ -25,7 +25,7 @@ function createBtn() {
   btn.style.width = "80px";
   btn.style.height = "20px";
   btn.style.float = "right";
-  btn.style.marginBottom = "16px"
+  btn.style.marginBottom = "16px";
   
   //give the btn some functionality
   btn.onclick = function() {
