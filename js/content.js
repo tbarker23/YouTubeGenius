@@ -24,6 +24,8 @@ function createBtn() {
   //style it
   btn.style.width = "80px";
   btn.style.height = "20px";
+  btn.style.float = "right";
+  btn.style.marginBottom = "16px"
   
   //give the btn some functionality
   btn.onclick = function() {
@@ -37,7 +39,7 @@ var geniusBtn = createBtn();
 
 //add button to page whenever DOM changes (ajax workaround from document.ready)
 document.addEventListener("DOMSubtreeModified", function() {
-  document.getElementById("watch8-sentiment-actions").appendChild(geniusBtn);
+  document.getElementById("watch7-subscription-container").appendChild(geniusBtn);
 }, false);
 
 /**
@@ -161,7 +163,8 @@ function addLyricsToPage(lyrics, title) {
   //console.log(str);
   var links = addOnClicks(str);
   //console.log(links);
-  var output = "<div class='lyric-title-container'>" + "<h2 class='lyric-title'>" + title + "</h2>" + "</div>";
+  var output = "<div class='lyric-title-container'>" + 
+                "<h2 class='lyric-title'>" + title + "</h2>" + "</div>";
   links[0].id = "lyricsContainer";
   for(i = 0; i < links.length; i++) {
     output += links[i].outerHTML;

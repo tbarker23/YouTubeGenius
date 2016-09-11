@@ -20,4 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
     inPageCommentRadio.onclick = function() {
         chrome.extension.getBackgroundPage().setPref("inPage");
     };
+    
+    openHelpBtn.onclick = function() {
+      chrome.tabs.create({url: "./html/help.html"});
+    };
+    
 }, false);

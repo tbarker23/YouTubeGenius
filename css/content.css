@@ -6,6 +6,7 @@
   width: 100%;
   text-align: center;
   z-index: 1000;
+  font-family: Whitney,sans-serif;
 }
 
 #overlay div {
@@ -16,9 +17,9 @@
   border-left: 3px solid #99A7EE;
   padding: 15px;
   text-align: center;
-  top: 15%;
   left: 55%;
   border-radius: 3%;
+  font-family: Whitney,sans-serif;
 }
 
 #titleText {
