@@ -3,7 +3,7 @@
 
   "name": "YouTube Genius",
   "description": "This extension shows the Genius.com lyrics and annotations for a YouTube video",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "icons": {
     "16": "images/icon.png",
     "48": "images/icon.png",
@@ -25,7 +25,8 @@
     "*://youtube.com/*",
     "*://www.youtube.com/*",
     "*://www.genius.com/*",
-    "*://genius.com/*"
+    "*://genius.com/*",
+    "*://api.genius.com/*"
   ],
   "content_scripts": [
     {
